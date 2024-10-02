@@ -1,2 +1,13 @@
 cmake-build-debug
 .idea
+*.vcxproj
+*.vcxproj.*
+*.sln
+*Cache*
+cmake_install.cmake
+Debug
+IkkSpilOrienteretProjekt.dir
+bin
+_deps
+x64
+CMakeFiles

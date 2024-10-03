@@ -11,3 +11,4 @@ bin
 _deps
 x64
 CMakeFiles
+build

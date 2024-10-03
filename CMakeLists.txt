@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(IkkSpilOrienteretProjekt)
 
+set(CMAKE_CXX_COMPILER "C:/Program Files/JetBrains/CLion 2024.1.5/bin/clang/win/x64/clangd.exe")
+
 # Exports executable to the bin directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
 
@@ -9,6 +11,8 @@ set(OpenGL_GL_PREFERENCE "GLVND")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Set the directory of the imgui files we use
 set(IMGUI_DIR "${CMAKE_BINARY_DIR}/vendor")
@@ -38,6 +42,8 @@ find_package(OpenGL 3 REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
 file(GLOB_RECURSE SRC src/*.cpp)
+
+message(STATUS "=== CMAKE USING COMPILER: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
 

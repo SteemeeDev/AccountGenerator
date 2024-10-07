@@ -1,67 +1,58 @@
-cmake_minimum_required(VERSION 3.20)
-project(IkkSpilOrienteretProjekt)
-
-set(CMAKE_CXX_COMPILER "C:/Program Files/JetBrains/CLion 2024.1.5/bin/clang/win/x64/clangd.exe")
-
-# Exports executable to the bin directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin/)
-
-# Set minimum required OpenGL version
-set(OpenGL_GL_PREFERENCE "GLVND")
+cmake_minimum_required(VERSION 3.28)
+project(ISOP) # Navn på projekt og exe
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Wconversion")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Set the directory of the imgui files we use
-set(IMGUI_DIR "${CMAKE_BINARY_DIR}/vendor")
+include(FetchContent)
 
-# Include ImGui
-file(GLOB IMGUI_SRC
-        "${IMGUI_DIR}/*.cpp"
-        "${IMGUI_DIR}/*.h"
-        "${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp"
-        "${IMGUI_DIR}/backends/imgui_impl_opengl3.h"
-        "${IMGUI_DIR}/backends/imgui_impl_glfw.cpp"
-        "${IMGUI_DIR}/backends/imgui_impl_glfw.h"
-)
+find_package(OpenGL REQUIRED)
+find_package(glfw3 CONFIG)
+if(NOT glfw3_FOUND)
+    FetchContent_Declare(
+            glfw
+            GIT_REPOSITORY https://github.com/glfw/glfw
+            GIT_PROGRESS TRUE
+    )
 
-# Find GLFW
-if(WIN32)
-    include(FetchContent)
-
-    FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git GIT_TAG 3.4)
     FetchContent_MakeAvailable(glfw)
-else()
-    find_package(glfw3 REQUIRED)
 endif()
-# Find OpenGL
-find_package(OpenGL 3 REQUIRED)
 
-include_directories(${OPENGL_INCLUDE_DIR})
+set(IMGUI_DIR "${CMAKE_BINARY_DIR}/extern/imgui")
+set(IMGUI_BACKEND_DIR "${IMGUI_DIR}/backends")
 
-file(GLOB_RECURSE SRC src/*.cpp)
-
-message(STATUS "=== CMAKE USING COMPILER: ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+file(GLOB_RECURSE SRC "src/*.cpp")
+file(GLOB IMGUI_SRC
+    "${IMGUI_DIR}/*.cpp"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.cpp"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw3.cpp"
+)
+file(GLOB IMGUI_INC
+    "${IMGUI_DIR}/*.h"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.h"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw3.h"
+)
 
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${IMGUI_DIR} ${IMGUI_DIR}/backends)
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE glfw
+        PRIVATE ${OPENGL_LIBRARIES}
+        PRIVATE opengl32
+)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${OPENGL_LIBRARIES})
+target_include_directories(${PROJECT_NAME}
+        PRIVATE "${CMAKE_SOURCE_DIR}/extern"
+        PRIVATE "${IMGUI_DIR}"
+        PRIVATE "${IMGUI_BACKEND_DIR}"
+        PRIVATE "${OPENGL_INCLUDE_DIR}"
+)
 
-# Platform specific settings
-if(WIN32)
-    # Windows settings
-    target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
-elseif(UNIX AND NOT APPLE)
-    # Linux settings
-    target_link_libraries(${PROJECT_NAME} PRIVATE dl)
-elseif(APPLE)
-    # Apple settings
-    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework OpenGL")
-    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework Cocoa")
-    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreVideo")
-endif()
+#include_directories(
+#        ${IMGUI_DIR}
+#        ${IMGUI_BACKEND_DIR}
+#        ${OPENGL_INCLUDE_DIR}
+#)

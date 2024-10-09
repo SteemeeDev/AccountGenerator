@@ -12,7 +12,7 @@ namespace App{
 
         m_io = &ImGui::GetIO(); (void)m_io;
         m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        // m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         ImGui::StyleColorsDark(); // Dark mode (Classic | Light | Dark)
 
@@ -26,5 +26,9 @@ namespace App{
 
     void GuiRenderer::DrawGUI(){
         ImGui::ShowDemoWindow();
+
+        ImGui::Begin("Docking window");
+        ImGui::Text("DOCKING DUR!!!!");
+        ImGui::End();
     }
 }

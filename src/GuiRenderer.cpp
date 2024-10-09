@@ -21,7 +21,7 @@ namespace App{
     }
 
     GuiRenderer::~GuiRenderer(){
-        delete m_io;
+        m_io = nullptr;
     }
 
     void GuiRenderer::DrawGUI(){
@@ -30,5 +30,6 @@ namespace App{
         ImGui::Begin("Docking window");
         ImGui::Text("DOCKING DUR!!!!");
         ImGui::End();
+
     }
 }

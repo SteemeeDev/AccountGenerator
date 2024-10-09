@@ -3,7 +3,7 @@ project(ISOP) # Navn på projekt og exe
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Wconversion")
+#set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Wconversion")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -21,19 +21,19 @@ if(NOT glfw3_FOUND)
     FetchContent_MakeAvailable(glfw)
 endif()
 
-set(IMGUI_DIR "${CMAKE_BINARY_DIR}/extern/imgui")
-set(IMGUI_BACKEND_DIR "${IMGUI_DIR}/backends")
+set(IMGUI_DIR "${CMAKE_SOURCE_DIR}/extern/imgui")
+set(IMGUI_BACKEND_DIR "${CMAKE_SOURCE_DIR}/extern/imgui/backends")
 
 file(GLOB_RECURSE SRC "src/*.cpp")
 file(GLOB IMGUI_SRC
     "${IMGUI_DIR}/*.cpp"
     "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.cpp"
-    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw3.cpp"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw.cpp"
 )
 file(GLOB IMGUI_INC
     "${IMGUI_DIR}/*.h"
     "${IMGUI_BACKEND_DIR}/imgui_impl_opengl3.h"
-    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw3.h"
+    "${IMGUI_BACKEND_DIR}/imgui_impl_glfw.h"
 )
 
 add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
@@ -50,9 +50,3 @@ target_include_directories(${PROJECT_NAME}
         PRIVATE "${IMGUI_BACKEND_DIR}"
         PRIVATE "${OPENGL_INCLUDE_DIR}"
 )
-
-#include_directories(
-#        ${IMGUI_DIR}
-#        ${IMGUI_BACKEND_DIR}
-#        ${OPENGL_INCLUDE_DIR}
-#)

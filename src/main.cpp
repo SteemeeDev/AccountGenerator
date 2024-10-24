@@ -4,8 +4,8 @@
 int main(){
     App::AppSpecs specs;
     specs.title = "Account Generator";
-    specs.width = 1600;
-    specs.height = 900;
+    specs.width = 400;
+    specs.height = 400;
 
     auto app = App::Application(specs);
     app.Loop();

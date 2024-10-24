@@ -4,6 +4,8 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
+#include "FileUtil.h"
+
 namespace App{
     Application::Application(AppSpecs specs) : m_specs(std::move(specs)){
         // Attempt to initialize glfw. If not return an error
@@ -16,6 +18,7 @@ namespace App{
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_RESIZABLE, false);
 
         // Create a GLFWwindow with width, height, and title. No monitor and no share
         m_window = glfwCreateWindow(m_specs.width, m_specs.height, m_specs.title.c_str(), nullptr, nullptr);
@@ -28,7 +31,11 @@ namespace App{
         glfwSwapInterval(1); // vsync
 
         m_gui = std::make_unique<GuiRenderer>(m_window);
+
+        FileUtil fu;
+        fu.readFile("C:\\Users\\biscu\\source\\repos\\AccountGenerator\\src\\Passwords.txt");
     }
+
 
     Application::~Application(){
         glfwDestroyWindow(m_window);
@@ -57,7 +64,7 @@ namespace App{
 
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            // Finall swap front and backbuffers
+            // Final swap front and backbuffers
             glfwSwapBuffers(m_window);
         }
     }

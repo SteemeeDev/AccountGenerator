@@ -1,23 +1,35 @@
 #include "GuiRenderer.h"
 
+#include <imgui_internal.h>
+#include <iostream>
+#include <ostream>
+
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 
 namespace App{
     GuiRenderer::GuiRenderer(GLFWwindow* window){
+        m_window = window;
         // Initialize ImGui
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
         m_io = &ImGui::GetIO(); (void)m_io;
         m_io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-        m_io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         ImGui::StyleColorsDark(); // Dark mode (Classic | Light | Dark)
 
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(m_glslVersion.c_str());
+
+        m_windowFlags |= ImGuiWindowFlags_NoResize;
+        m_windowFlags |= ImGuiWindowFlags_NoMove;
+        m_windowFlags |= ImGuiWindowFlags_NoCollapse;
+        m_windowFlags |= ImGuiWindowFlags_MenuBar;
+        m_windowFlags |= ImGuiWindowFlags_NoTitleBar;
+
+        glfwGetWindowSize(m_window, &m_width, &m_height);
     }
 
     GuiRenderer::~GuiRenderer(){
@@ -25,11 +37,26 @@ namespace App{
     }
 
     void GuiRenderer::DrawGUI(){
-        ImGui::ShowDemoWindow();
 
-        ImGui::Begin("Docking window");
-        ImGui::Text("DOCKING DUR!!!!");
+        ImGui::Begin("Password Generator", nullptr, m_windowFlags);
+
+        ImGui::SetWindowPos({ 0,0 });
+        ImGui::SetWindowSize({static_cast<float>(m_width), static_cast<float>(m_height)});
+
+        if (ImGui::CollapsingHeader("Saved passwords")) {
+            ImGui::Text("Saved passwords:");
+        }
+
+        if (ImGui::CollapsingHeader("Generate Passwords")) {
+            ImGui::Text("Generate Passwords");
+        }
+
+        if(ImGui::CollapsingHeader("Generate Username")) {
+            ImGui::Text("Generate Username");
+        }
+
         ImGui::End();
+
 
     }
 }

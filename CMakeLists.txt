@@ -36,7 +36,9 @@ file(GLOB IMGUI_INC
     "${IMGUI_BACKEND_DIR}/imgui_impl_glfw.h"
 )
 
-add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC})
+add_executable(${PROJECT_NAME} ${SRC} ${IMGUI_SRC}
+        src/FileUtil.cpp
+        src/FileUtil.h)
 
 target_link_libraries(${PROJECT_NAME}
         PRIVATE glfw

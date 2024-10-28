@@ -43,6 +43,20 @@ namespace App{
         ImGui::SetWindowPos({ 0,0 });
         ImGui::SetWindowSize({static_cast<float>(m_width), static_cast<float>(m_height)});
 
+        if(ImGui::BeginMenuBar()){
+            if(ImGui::BeginMenu("File")){
+                if(ImGui::MenuItem("Ligma")){
+                    std::clog << "LIGAMA\n";
+                }
+                if(ImGui::MenuItem("BALLS")){
+                    std::clog << "BALALAS\n";
+                }
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenuBar();
+        }
+
         if (ImGui::CollapsingHeader("Saved passwords")) {
             ImGui::Text("Saved passwords:");
         }

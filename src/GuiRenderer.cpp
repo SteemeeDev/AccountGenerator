@@ -62,7 +62,15 @@ namespace App{
         }
 
         if (ImGui::CollapsingHeader("Generate Passwords")) {
-            ImGui::Text("Generate Passwords");
+            ImGui::Text("Password length: ");
+            ImGui::SameLine();
+            ImGui::SliderInt("Length", &m_passLength, 1, 100);
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.5f, 0, 0, 1.0f));
+            if (ImGui::Button("Generate!")) {
+                std::cout << "Generating Password with length " << m_passLength << std::endl;
+
+            }
+            ImGui::PopStyleColor(1);
         }
 
         if(ImGui::CollapsingHeader("Generate Username")) {

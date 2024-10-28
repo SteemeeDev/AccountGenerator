@@ -21,6 +21,8 @@ namespace App{
         ImGuiIO* m_io;
         ImGuiWindowFlags m_windowFlags;
         int m_width, m_height;
+
+        int m_passLength{5};
     };
 }
 

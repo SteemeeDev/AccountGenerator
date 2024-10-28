@@ -4,6 +4,7 @@
 
 #include "FileUtil.h"
 
+#include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include <ostream>
@@ -18,13 +19,16 @@ FileUtil::~FileUtil() {}
 void FileUtil::readFile(const std::string& file) {
     if (!std::filesystem::exists(file)) {
         std::cerr << "File not found!" << std::endl;
+        return;
     }
 
     std::ifstream inFile(file);
 
-    std::string text;
-    while (getline (inFile, text)) {
-        std::cout << text << "\n";
+    std::stringstream buffer;
+    std::string line;
+
+    while(std::getline(inFile, line)) {
+        
     }
 
     inFile.close();

@@ -5,6 +5,7 @@
 #ifndef FILEUTIL_H
 #define FILEUTIL_H
 #include <string>
+#include <unordered_map>
 
 
 class FileUtil {
@@ -13,6 +14,8 @@ public:
     ~FileUtil();
 
     void readFile(const std::string& file);
+private:
+    std::unordered_map<std::string, std::string> m_configs;
 };
 
 

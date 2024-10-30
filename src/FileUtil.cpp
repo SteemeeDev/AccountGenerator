@@ -1,7 +1,3 @@
-//
-// Created by biscu on 23-10-2024.
-//
-
 #include "FileUtil.h"
 
 #include <algorithm>
@@ -11,25 +7,51 @@
 #include <filesystem>
 #include <fstream>
 
-FileUtil::FileUtil() {}
-FileUtil::~FileUtil() {}
-
-
-
-void FileUtil::readFile(const std::string& file) {
-    if (!std::filesystem::exists(file)) {
-        std::cerr << "File not found!" << std::endl;
+void FileUtil::ReadFile(const std::string& path){
+    std::ifstream iFile(path);
+    if(!iFile.is_open()){
+        std::cerr << "Could not open file: " << path << '\n';
         return;
     }
 
-    std::ifstream inFile(file);
+    std::stringstream linestream;
+    std::string key, value, line;
 
-    std::stringstream buffer;
-    std::string line;
+    while(std::getline(iFile, line)){
+        if(line.empty()) continue;
 
-    while(std::getline(inFile, line)) {
-        
+        linestream.clear();
+        linestream << line;
+
+        if(!std::getline(linestream, key, ':')){
+            std::cerr << "Could not seperate key and value!\n";
+            continue;
+        }
+
+        std::cout << "KEY: " << key;
+
+        if(std::getline(linestream, value)){
+            value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
+        }
+
+        std::cout << " | VALUE: " << value << '\n';
+
+        m_unames[key] = value;
+    }
+}
+
+void FileUtil::SaveUsername(const std::string& path, const char* uname){
+
+}
+void FileUtil::SavePassword(const std::string& path, const char* pword){
+
+}
+
+std::string FileUtil::GetUname(const std::string& origin){
+    if(const auto it = m_unames.find(origin); it != m_unames.end()){
+        return it->second;
     }
 
-    inFile.close();
+    std::cerr << "Could not find username at: " << origin << ". Returning empty string\n";
+    return "";
 }

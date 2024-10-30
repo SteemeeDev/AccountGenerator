@@ -4,18 +4,24 @@
 
 #ifndef FILEUTIL_H
 #define FILEUTIL_H
+
 #include <string>
 #include <unordered_map>
 
 
 class FileUtil {
 public:
-    FileUtil();
-    ~FileUtil();
+    FileUtil() = default;
+    ~FileUtil() = default;
 
-    void readFile(const std::string& file);
+    void ReadFile(const std::string& path);
+
+    void SaveUsername(const std::string& path, const char* uname);
+    void SavePassword(const std::string& path, const char* pword);
+
+    std::string GetUname(const std::string& origin);
 private:
-    std::unordered_map<std::string, std::string> m_configs;
+    std::unordered_map<std::string, std::string> m_unames;
 };
 
 

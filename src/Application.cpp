@@ -31,9 +31,6 @@ namespace App{
         glfwSwapInterval(1); // vsync
 
         m_gui = std::make_unique<GuiRenderer>(m_window);
-
-        FileUtil fu;
-        fu.readFile("C:\\Users\\biscu\\source\\repos\\AccountGenerator\\src\\Passwords.txt");
     }
 
 

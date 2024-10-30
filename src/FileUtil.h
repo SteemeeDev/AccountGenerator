@@ -7,6 +7,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 
 class FileUtil {
@@ -19,11 +20,11 @@ public:
     void SaveUsername(const std::string& path, const char* uname);
     void SavePassword(const std::string& path, const char* pword);
 
-    std::string GetUname(const std::string& origin);
+    std::string ShowUname(const std::string& source);
+
+    std::vector<std::string> GetAccounts();
 private:
     std::unordered_map<std::string, std::string> m_unames;
 };
-
-
 
 #endif //FILEUTIL_H

@@ -47,11 +47,20 @@ void FileUtil::SavePassword(const std::string& path, const char* pword){
 
 }
 
-std::string FileUtil::GetUname(const std::string& origin){
-    if(const auto it = m_unames.find(origin); it != m_unames.end()){
+std::string FileUtil::ShowUname(const std::string& source){
+    if(auto it = m_unames.find(source); it != m_unames.end()){
         return it->second;
     }
 
-    std::cerr << "Could not find username at: " << origin << ". Returning empty string\n";
     return "";
 }
+
+std::vector<std::string> FileUtil::GetAccounts(){
+    std::vector<std::string> accounts;
+    for (const auto& i : m_unames){
+        accounts.push_back(i.first);
+    }
+
+    return accounts;
+}
+

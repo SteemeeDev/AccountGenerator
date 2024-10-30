@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.28)
 project(ISOP) # Navn på projekt og exe
 
+# libgcc_s_seh-1.dll + libstdc++-6.dll missing
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 #set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -Wconversion")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 include(FetchContent)
 

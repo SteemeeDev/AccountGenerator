@@ -57,24 +57,38 @@ namespace App{
             ImGui::EndMenuBar();
         }
 
-        if (ImGui::CollapsingHeader("Saved passwords")) {
+        if (ImGui::CollapsingHeader("Saved Accounts")) {
             ImGui::Text("Saved passwords:");
         }
 
-        if (ImGui::CollapsingHeader("Generate Passwords")) {
+        if (ImGui::CollapsingHeader("Generate account")) {
+            ImGui::Text("Origin: ");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(140);
+            ImGui::PushItemWidth(255);
+            ImGui::InputTextWithHint("##Origin","Example: Youtube.com", m_origin, IM_ARRAYSIZE(m_origin));
+
+            ImGui::Text("Username: ");
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(140);
+            ImGui::InputTextWithHint("##Username", "Example: Susan_Wojicjcjiji",m_username, IM_ARRAYSIZE(m_username));
+
             ImGui::Text("Password length: ");
             ImGui::SameLine();
+            ImGui::SetCursorPosX(140);
             ImGui::SliderInt("Length", &m_passLength, 1, 100);
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.5f, 0, 0, 1.0f));
-            if (ImGui::Button("Generate!")) {
-                std::cout << "Generating Password with length " << m_passLength << std::endl;
+            ImGui::PopItemWidth();
 
+            static float buttonWidth = 200;
+            ImGui::SetCursorPosX(ImGui::GetWindowWidth()/2-buttonWidth/2);
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.5f, 0, 0, 1.0f));
+            if (ImGui::Button("Generate!", { buttonWidth,20 })) {
+                std::cout << "\nGenerating account..." << "\n";
+                std::cout << "With password length: " << m_passLength << "\n";
+                std::cout << "With username: " << m_username << "\n";
+                std::cout << "With origin: " << m_origin;
             }
             ImGui::PopStyleColor(1);
-        }
-
-        if(ImGui::CollapsingHeader("Generate Username")) {
-            ImGui::Text("Generate Username");
         }
 
         ImGui::End();

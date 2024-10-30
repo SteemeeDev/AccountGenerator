@@ -23,6 +23,8 @@ namespace App{
         int m_width, m_height;
 
         int m_passLength{5};
+        char m_username [40]{};
+        char m_origin   [40]{};
     };
 }
 

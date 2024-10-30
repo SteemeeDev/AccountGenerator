@@ -58,7 +58,19 @@ namespace App{
         }
 
         if (ImGui::CollapsingHeader("Saved Accounts")) {
-            ImGui::Text("Saved passwords:");
+            for (int i = 0; i < 10; ++i) {
+                ImGui::SetCursorPosX(20);
+                std::string label("Account number " + std::to_string(i));
+                if (ImGui::CollapsingHeader(label.c_str())) {
+                    ImGui::SetCursorPosX(40);
+                    ImGui::Text("Username");
+                    ImGui::SetCursorPosX(40);
+                    ImGui::Text("Password");
+                    ImGui::SameLine();
+                    ImGui::Button("Reveal password");
+                }
+            }
+            ImGui::Text("");
         }
 
         if (ImGui::CollapsingHeader("Generate account")) {

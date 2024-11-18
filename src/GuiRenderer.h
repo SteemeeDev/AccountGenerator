@@ -25,6 +25,14 @@ namespace App{
         int m_passLength{5};
         char m_username [40]{};
         char m_origin   [40]{};
+
+        struct m_account {
+            std::string origin;
+            std::string username;
+            std::string password;
+        };
+
+        m_account m_accounts[10];
     };
 }
 

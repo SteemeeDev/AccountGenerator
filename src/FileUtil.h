@@ -23,6 +23,8 @@ public:
     std::string ShowPasswd(const std::string& source);
 
     std::vector<std::string> GetAccounts();
+
+    std::string genRandomString(int length);
 private:
     std::string m_path;
 

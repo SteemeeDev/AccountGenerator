@@ -65,6 +65,8 @@ void FileUtil::NewEntry(const std::string& source, const std::string& uname, std
     std::cout << finalOutput;
 
     oFile << finalOutput;
+
+    oFile.close();
 }
 
 std::string FileUtil::ShowUname(const std::string& source){
@@ -93,3 +95,13 @@ std::vector<std::string> FileUtil::GetAccounts(){
     return accounts;
 }
 
+std::string FileUtil::genRandomString(int length) {
+    std::string final;
+    srand(time(nullptr));
+    for(int i = 0; i < length; i++) {
+        char c = rand() % 255;
+        final += c;
+    }
+    final.erase(std::remove_if(final.begin(), final.end(), ::isspace), final.end());
+    return final;
+}

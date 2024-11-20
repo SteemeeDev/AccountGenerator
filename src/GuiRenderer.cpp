@@ -140,7 +140,7 @@ namespace App{
                 std::cout << "With username: " << m_username << "\n";
                 std::cout << "With origin: " << m_origin;
 
-
+                m_fileUtil.NewEntry(m_origin, m_username, m_fileUtil.genRandomString(m_passLength));
             }
             ImGui::PopStyleColor(1);
         }

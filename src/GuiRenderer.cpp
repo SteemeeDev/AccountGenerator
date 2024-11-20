@@ -8,6 +8,8 @@
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 
+#include "FileUtil.h"
+
 namespace App{
     GuiRenderer::GuiRenderer(GLFWwindow* window){
         m_window = window;
@@ -30,6 +32,8 @@ namespace App{
         m_windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
         glfwGetWindowSize(m_window, &m_width, &m_height);
+
+        m_fileUtil.ReadFile(R"(C:\Users\biscu\source\repos\AccountGenerator\src\Passwords.txt)");
     }
 
     GuiRenderer::~GuiRenderer(){
@@ -58,31 +62,43 @@ namespace App{
         }
 
         if (ImGui::CollapsingHeader("Saved Accounts")) {
-            for (int i = 0; i < 10; ++i) {
+            std::vector<std::string> accounts = m_fileUtil.GetAccounts();
+            for (int i = 0; i < accounts.size(); ++i) {
                 ImGui::SetCursorPosX(20);
-                std::string label("Youtube.com " + std::to_string(i));
+                std::string label(accounts[i]);
                 if (ImGui::CollapsingHeader(label.c_str())) {
+                    ImGui::PushID(i);
                     ImGui::SetCursorPosX(40);
                     ImGui::Text("Username:");
                     ImGui::SameLine();
-                    ImGui::TextColored({50,0,255,255},"FGaming");
+                    ImGui::TextColored({20,0,255,255},m_fileUtil.ShowUname(accounts[i]).c_str());
                     ImGui::SameLine();
-                    ImGui::PushID(1);
-                    if(ImGui::Button("Copy")) {
-                        ImGui::SetClipboardText("Sigma_male");
+                    if(ImGui::Button("Copy##1")) {
+                        ImGui::SetClipboardText(m_fileUtil.ShowUname(accounts[i]).c_str());
                     }
-                    ImGui::PopID();
-
                     ImGui::SetCursorPosX(40);
                     ImGui::Text("Password:");
                     ImGui::SameLine();
-                    if(ImGui::Button("Reveal password")) {
+                    if(ImGui::Button("Reveal password##2")) {
                         ImGui::OpenPopup("Password");
                     }
-                    ImGui::PushID(2);
+                    if (ImGui::BeginPopup("Password"))
+                    {
+                        ImGui::Text(m_fileUtil.ShowPasswd(accounts[i]).c_str());
+                        if (ImGui::Button("Close##4"))
+                        {
+                            ImGui::CloseCurrentPopup();
+                        }
+                        ImGui::SameLine();
+                        if(ImGui::Button("Copy##5")) {
+                            ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i]).c_str());
+                        }
+                        ImGui::EndPopup();
+                    }
                     ImGui::SameLine();
-                    if(ImGui::Button("Copy")) {
-                        ImGui::SetClipboardText("Ilovemen123");
+
+                    if(ImGui::Button("Copy##6")) {
+                        ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i]).c_str());
                     }
                     ImGui::PopID();
                 }
@@ -90,19 +106,7 @@ namespace App{
             ImGui::Text("");
         }
 
-        if (ImGui::BeginPopup("Password"))
-        {
-            ImGui::Text("Insert password here");
-            if (ImGui::Button("Close"))
-            {
-                ImGui::CloseCurrentPopup();
-            }
-            ImGui::SameLine();
-            if(ImGui::Button("Copy")) {
-                ImGui::SetClipboardText("Ilovemen123");
-            }
-            ImGui::EndPopup();
-        }
+
 
         if (ImGui::CollapsingHeader("Generate account")) {
             ImGui::Text("Origin: ");
@@ -114,7 +118,7 @@ namespace App{
             ImGui::Text("Username: ");
             ImGui::SameLine();
             ImGui::SetCursorPosX(140);
-            ImGui::InputTextWithHint("##Username", "Example: Susan_Wojicjcjiji",m_username, IM_ARRAYSIZE(m_username));
+            ImGui::InputTextWithHint("##Username", "Example: Susan_Wojicjcjiji", m_username, IM_ARRAYSIZE(m_username));
 
             ImGui::Text("Password length: ");
             ImGui::SameLine();
@@ -124,18 +128,19 @@ namespace App{
 
             static constexpr float buttonWidth = 200;
             ImGui::SetCursorPosX(ImGui::GetWindowWidth()/2-buttonWidth/2);
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.5f, 0, 0, 1.0f));
-            if (ImGui::Button("Generate!", { buttonWidth,20 })) {
+
+            if (m_username[0] != '\0' && m_origin[0] != '\0') {
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0.5f, 0, 1.0f));
+            }else {
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0, 0, 1.0f));
+            }
+            if (ImGui::Button("Generate!", { buttonWidth,20 }) && m_username[0] != '\0' && m_origin[0] != '\0') {
                 std::cout << "\nGenerating account..." << "\n";
                 std::cout << "With password length: " << m_passLength << "\n";
                 std::cout << "With username: " << m_username << "\n";
                 std::cout << "With origin: " << m_origin;
-                m_account a;
-                a.origin = m_origin;
-                a.username = m_username;
-                a.password = "123";
 
-                //m_accounts[sizeof(m_accounts)] = a;
+
             }
             ImGui::PopStyleColor(1);
         }

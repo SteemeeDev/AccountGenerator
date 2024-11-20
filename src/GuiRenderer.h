@@ -6,6 +6,8 @@
 #include <string>
 #include <GLFW/glfw3.h>
 
+#include "FileUtil.h"
+
 namespace App{
 
     class GuiRenderer {
@@ -26,13 +28,7 @@ namespace App{
         char m_username [40]{};
         char m_origin   [40]{};
 
-        struct m_account {
-            std::string origin;
-            std::string username;
-            std::string password;
-        };
-
-        m_account m_accounts[10];
+        FileUtil m_fileUtil;
     };
 }
 

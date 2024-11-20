@@ -14,12 +14,6 @@ int main(){
     FileUtil fu;
     fu.ReadFile(R"(C:\dev\cpp\AccountGenerator\src\Passwords.txt)");
 
-    auto a = fu.GetAccounts();
-    for(const auto & i : a){
-        std::cout << "ACCOUNT DEST: " << i << '\n';
-        std::cout << "ACCOUNT UNAME: " << fu.ShowUname(i) << '\n';
-    }
-
     auto app = App::Application(specs);
     app.Loop();
 

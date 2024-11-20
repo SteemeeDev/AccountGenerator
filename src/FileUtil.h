@@ -21,10 +21,11 @@ public:
     void SavePassword(const std::string& path, const char* pword);
 
     std::string ShowUname(const std::string& source);
+    std::string ShowPasswd(const std::string& source);
 
     std::vector<std::string> GetAccounts();
 private:
-    std::unordered_map<std::string, std::string> m_unames;
+    std::unordered_map<std::string, std::pair<std::string, std::string>> m_sources;
 };
 
 #endif //FILEUTIL_H

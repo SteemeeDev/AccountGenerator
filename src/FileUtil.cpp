@@ -15,28 +15,28 @@ void FileUtil::ReadFile(const std::string& path){
     }
 
     std::stringstream linestream;
-    std::string key, value, line;
+    std::string key, uname, pword, line;
 
     while(std::getline(iFile, line)){
         if(line.empty()) continue;
 
         linestream.clear();
-        linestream << line;
+        linestream.str(line);
 
         if(!std::getline(linestream, key, ':')){
             std::cerr << "Could not seperate key and value!\n";
             continue;
         }
 
-        std::cout << "KEY: " << key;
-
-        if(std::getline(linestream, value)){
-            value.erase(std::remove_if(value.begin(), value.end(), ::isspace), value.end());
+        if(std::getline(linestream, uname, ':')){
+            uname.erase(std::remove_if(uname.begin(), uname.end(), ::isspace), uname.end());
         }
 
-        std::cout << " | VALUE: " << value << '\n';
+        if(std::getline(linestream, pword)){
+            pword.erase(std::remove_if(pword.begin(), pword.end(), ::isspace), pword.end());
+        }
 
-        m_unames[key] = value;
+        m_sources[key] = {uname, pword};
     }
 }
 
@@ -48,16 +48,25 @@ void FileUtil::SavePassword(const std::string& path, const char* pword){
 }
 
 std::string FileUtil::ShowUname(const std::string& source){
-    if(auto it = m_unames.find(source); it != m_unames.end()){
-        return it->second;
+    if(const auto& it = m_sources.find(source); it != m_sources.end()){
+        return it->second.first;
     }
 
     return "";
 }
 
+std::string FileUtil::ShowPasswd(const std::string& source){
+    if(const auto& it = m_sources.find(source); it != m_sources.end()){
+        return it->second.second;
+    }
+
+    return "";
+}
+
+
 std::vector<std::string> FileUtil::GetAccounts(){
     std::vector<std::string> accounts;
-    for (const auto& i : m_unames){
+    for (const auto& i : m_sources){
         accounts.push_back(i.first);
     }
 

@@ -14,6 +14,8 @@ int main(){
     FileUtil fu;
     fu.ReadFile(R"(C:\dev\cpp\AccountGenerator\src\Passwords.txt)");
 
+    fu.NewEntry("gnu.org", "Peder", "HACKER");
+
     auto app = App::Application(specs);
     app.Loop();
 

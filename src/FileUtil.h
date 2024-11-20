@@ -17,14 +17,15 @@ public:
 
     void ReadFile(const std::string& path);
 
-    void SaveUsername(const std::string& path, const char* uname);
-    void SavePassword(const std::string& path, const char* pword);
+    void NewEntry(const std::string& source, const std::string& uname, std::string pword);
 
     std::string ShowUname(const std::string& source);
     std::string ShowPasswd(const std::string& source);
 
     std::vector<std::string> GetAccounts();
 private:
+    std::string m_path;
+
     std::unordered_map<std::string, std::pair<std::string, std::string>> m_sources;
 };
 

@@ -14,6 +14,8 @@ void FileUtil::ReadFile(const std::string& path){
         return;
     }
 
+    m_path = path;
+
     std::stringstream linestream;
     std::string key, uname, pword, line;
 
@@ -36,15 +38,33 @@ void FileUtil::ReadFile(const std::string& path){
             pword.erase(std::remove_if(pword.begin(), pword.end(), ::isspace), pword.end());
         }
 
+        for(char& i : key){
+            i -= 1;
+        }
+
         m_sources[key] = {uname, pword};
     }
 }
 
-void FileUtil::SaveUsername(const std::string& path, const char* uname){
+void FileUtil::NewEntry(const std::string& source, const std::string& uname, std::string pword){
+    std::ofstream oFile(m_path, std::ios::app);
+    if(!oFile.is_open()){
+        std::cerr << "Could not open output file: " << m_path << '\n';
+        return;
+    }
 
-}
-void FileUtil::SavePassword(const std::string& path, const char* pword){
+    std::string encryptedPword;
+    std::string finalOutput(source + ":" + uname + ":");
 
+    for(char& c : pword){
+        encryptedPword += c += 1;
+    }
+
+    finalOutput += encryptedPword;
+
+    std::cout << finalOutput;
+
+    oFile << finalOutput;
 }
 
 std::string FileUtil::ShowUname(const std::string& source){

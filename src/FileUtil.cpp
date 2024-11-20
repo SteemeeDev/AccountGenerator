@@ -78,9 +78,16 @@ std::string FileUtil::ShowUname(const std::string& source){
 }
 
 std::string FileUtil::ShowPasswd(const std::string& source){
+    std::string original;
+
     if(const auto& it = m_sources.find(source); it != m_sources.end()){
-        return it->second.second;
+        for(char& c : it->second.second){
+            original += c -= 1;
+        }
+
+        return original;
     }
+
 
     return "";
 }

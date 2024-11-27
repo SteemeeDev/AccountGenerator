@@ -7,19 +7,15 @@
 #include <filesystem>
 #include <fstream>
 
-void FileUtil::ReadFile(const std::string& path){
-    std::ifstream iFile(path);
-    if(!iFile.is_open()){
-        std::cerr << "Could not open file: " << path << '\n';
-        return;
-    }
+void FileUtil::ReadFile(){
+    std::fstream File("Database");
 
-    m_path = path;
+    m_path = "Database";
 
     std::stringstream linestream;
     std::string key, uname, pword, line;
 
-    while(std::getline(iFile, line)){
+    while(std::getline(File, line)){
         if(line.empty()) continue;
 
         linestream.clear();
@@ -38,10 +34,6 @@ void FileUtil::ReadFile(const std::string& path){
             pword.erase(std::remove_if(pword.begin(), pword.end(), ::isspace), pword.end());
         }
 
-        for(char& i : key){
-            i -= 1;
-        }
-
         m_sources[key] = {uname, pword};
     }
 }
@@ -54,7 +46,7 @@ void FileUtil::NewEntry(const std::string& source, const std::string& uname, std
     }
 
     std::string encryptedPword;
-    std::string finalOutput(source + ":" + uname + ":");
+    std::string finalOutput("\n" + source + ":" + uname + ":");
 
     for(char& c : pword){
         encryptedPword += c += 1;
@@ -77,15 +69,22 @@ std::string FileUtil::ShowUname(const std::string& source){
     return "";
 }
 
-std::string FileUtil::ShowPasswd(const std::string& source){
+std::string FileUtil::ShowPasswd(const std::string& source, bool doDecrypt){
     std::string original;
 
     if(const auto& it = m_sources.find(source); it != m_sources.end()){
-        for(char& c : it->second.second){
-            original += c -= 1;
-        }
+        if (doDecrypt) {
+            for(char c : it->second.second){
 
-        return original;
+                original += c -= 1;
+
+            }
+
+            return original;
+        }else {
+            std::cout << "Gaming";
+            return it->second.second;
+        }
     }
 
 
@@ -106,8 +105,9 @@ std::string FileUtil::genRandomString(int length) {
     std::string final;
     srand(time(nullptr));
     for(int i = 0; i < length; i++) {
-        char c = rand() % 255;
-        final += c;
+        int temp = (rand() % 57)+33;
+        if (temp == 58) {continue;}
+        final += static_cast<char>(temp);
     }
     final.erase(std::remove_if(final.begin(), final.end(), ::isspace), final.end());
     return final;

@@ -29,6 +29,8 @@ namespace App{
         char m_origin   [40]{};
 
         FileUtil m_fileUtil;
+
+        bool m_firstFrame = true;
     };
 }
 

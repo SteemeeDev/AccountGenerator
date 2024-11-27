@@ -3,6 +3,8 @@
 #include <imgui_internal.h>
 #include <iostream>
 #include <ostream>
+#include <filesystem>
+#include <bits/fs_dir.h>
 
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
@@ -33,7 +35,8 @@ namespace App{
 
         glfwGetWindowSize(m_window, &m_width, &m_height);
 
-        m_fileUtil.ReadFile(R"(C:\Users\biscu\source\repos\AccountGenerator\src\Passwords.txt)");
+
+        m_fileUtil.ReadFile();
     }
 
     GuiRenderer::~GuiRenderer(){
@@ -47,21 +50,21 @@ namespace App{
         ImGui::SetWindowPos({ 0,0 });
         ImGui::SetWindowSize({static_cast<float>(m_width), static_cast<float>(m_height)});
 
-        if(ImGui::BeginMenuBar()){
-            if(ImGui::BeginMenu("File")){
-                if(ImGui::MenuItem("Ligma")){
-                    std::clog << "LIGAMA\n";
-                }
-                if(ImGui::MenuItem("BALLS")){
-                    std::clog << "BALALAS\n";
-                }
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
-        }
-
         if (ImGui::CollapsingHeader("Saved Accounts")) {
+            if (ImGui::Button("Delete ALL saved accounts")) {
+                ImGui::OpenPopup("Confirm");
+                if(ImGui::BeginPopup("Confirm")) {
+                    if (ImGui::Button("confirm")) {
+                        std::filesystem::remove("Database");
+                    }
+                    ImGui::SameLine();
+                    if (ImGui::Button("Cancel")) {
+                        ImGui::CloseCurrentPopup();
+                    }
+                    ImGui::EndPopup();
+                }
+                std::cout << "Saved Accounts deleted" << std::endl;
+            }
             std::vector<std::string> accounts = m_fileUtil.GetAccounts();
             for (int i = 0; i < accounts.size(); ++i) {
                 ImGui::SetCursorPosX(20);
@@ -84,21 +87,21 @@ namespace App{
                     }
                     if (ImGui::BeginPopup("Password"))
                     {
-                        ImGui::Text(m_fileUtil.ShowPasswd(accounts[i]).c_str());
+                        ImGui::Text(m_fileUtil.ShowPasswd(accounts[i], m_firstFrame).c_str());
                         if (ImGui::Button("Close##4"))
                         {
                             ImGui::CloseCurrentPopup();
                         }
                         ImGui::SameLine();
                         if(ImGui::Button("Copy##5")) {
-                            ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i]).c_str());
+                            ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i], m_firstFrame).c_str());
                         }
                         ImGui::EndPopup();
                     }
                     ImGui::SameLine();
 
                     if(ImGui::Button("Copy##6")) {
-                        ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i]).c_str());
+                        ImGui::SetClipboardText(m_fileUtil.ShowPasswd(accounts[i], m_firstFrame).c_str());
                     }
                     ImGui::PopID();
                 }
@@ -141,6 +144,7 @@ namespace App{
                 std::cout << "With origin: " << m_origin;
 
                 m_fileUtil.NewEntry(m_origin, m_username, m_fileUtil.genRandomString(m_passLength));
+                m_fileUtil.ReadFile();
             }
             ImGui::PopStyleColor(1);
         }

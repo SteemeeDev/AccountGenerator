@@ -15,12 +15,12 @@ public:
     FileUtil() = default;
     ~FileUtil() = default;
 
-    void ReadFile(const std::string& path);
+    void ReadFile();
 
     void NewEntry(const std::string& source, const std::string& uname, std::string pword);
 
     std::string ShowUname(const std::string& source);
-    std::string ShowPasswd(const std::string& source);
+    std::string ShowPasswd(const std::string& source, bool doDecrypt);
 
     std::vector<std::string> GetAccounts();
 

@@ -53,17 +53,6 @@ namespace App{
         if (ImGui::CollapsingHeader("Saved Accounts")) {
             if (ImGui::Button("Delete ALL saved accounts")) {
                 ImGui::OpenPopup("Confirm");
-                if(ImGui::BeginPopup("Confirm")) {
-                    if (ImGui::Button("confirm")) {
-                        std::filesystem::remove("Database");
-                    }
-                    ImGui::SameLine();
-                    if (ImGui::Button("Cancel")) {
-                        ImGui::CloseCurrentPopup();
-                    }
-                    ImGui::EndPopup();
-                }
-                std::cout << "Saved Accounts deleted" << std::endl;
             }
             std::vector<std::string> accounts = m_fileUtil.GetAccounts();
             for (int i = 0; i < accounts.size(); ++i) {
@@ -109,7 +98,18 @@ namespace App{
             ImGui::Text("");
         }
 
-
+        if(ImGui::BeginPopup("Confirm")) {
+            if (ImGui::Button("confirm")) {
+                std::cout << "Saved Accounts deleted" << std::endl;
+                std::filesystem::remove("Database");
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel")) {
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::EndPopup();
+        }
 
         if (ImGui::CollapsingHeader("Generate account")) {
             ImGui::Text("Origin: ");
